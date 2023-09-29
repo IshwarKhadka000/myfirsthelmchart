@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mongoExpress.name }}
+spec:
+  replicas: {{ .Values.mongoExpress.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mongoExpress.labels.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mongoExpress.labels.app }}
+    spec:
+      containers:
+      - name: {{ .Values.mongoExpress.containerName }}
+        image: {{ .Values.mongoExpress.containerImage }}
+        ports:
+        - containerPort: {{ .Values.mongoExpress.containerPort }}
+        env:
+        - name: {{ .Values.mongoExpress.dbUserName }}
+          valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongo-root-username
+        - name: {{ .Values.mongoExpress.dbPasswordName }}
+          valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongo-root-password
+        - name: {{ .Values.mongoExpress.dbServerName }}
+          valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.mongoExpress.configName }}
+                key: database_url
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mongoExpress.serviceName }}
+spec:
+  selector:
+    app: {{ .Values.mongoExpress.labels.app }}
+  type: {{ .Values.mongoExpress.serviceType }}
+  ports:
+  - protocol: {{ .Values.mongoExpress.serviceProtocal }}
+    port: {{ .Values.mongoExpress.servicePort }}
+    targetPort: {{ .Values.mongoExpress.servicetTargetPort }}
+    nodePort: {{ .Values.mongoExpress.serviceNodePort }}
+

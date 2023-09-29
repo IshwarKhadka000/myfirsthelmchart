@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.mongoDb.name }}
+  labels:
+    app: {{ .Values.mongoDb.labels.app }}
+spec:
+  replicas: {{ .Values.mongoDb.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mongoDb.labels.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mongoDb.labels.app }}
+    spec:
+      containers:
+      - name: {{ .Values.mongoDb.containerName }}
+        image: {{ .Values.mongoDb.containerImage }}
+        ports:
+        - containerPort: {{ .Values.mongoDb.containerPort }}
+        env:
+          - name: {{ .Values.mongoDb.dbUserName }}
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongo-root-username
+          - name: {{ .Values.mongoDb.dbPasswordName }}
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongo-root-password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.mongoDb.serviceName }}
+spec:
+  selector:
+    app: {{ .Values.mongoDb.labels.app }}
+  ports:
+    - protocol: {{ .Values.mongoDb.serviceProtocal }}
+      port: {{ .Values.mongoDb.servicePort }}
+      targetPort: {{ .Values.mongoDb.targetPort }}
+       
+    
+
+
+

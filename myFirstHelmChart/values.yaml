@@ -1,0 +1,34 @@
+mongoDb:
+  replicaCount: 1
+  name: mongodb-deployment
+  labels:
+    app: mongodb
+  containerName: mongodb
+  containerImage: mongo
+  containerPort: 27017
+  dbUserName: MONGO_INITDB_ROOT_USERNAME
+  dbPasswordName: MONGO_INITDB_ROOT_PASSWORD
+  serviceName: mongodb-service
+  serviceProtocal: TCP
+  servicePort: 27017
+  targetPort: 27017
+
+mongoExpress:
+  replicaCount: 1
+  name: mongo-express
+  labels:
+    app: mongo-express
+  containerName: mongo-express
+  containerImage: mongo-express
+  containerPort: 8081
+  dbUserName: ME_CONFIG_MONGODB_ADMINUSERNAME
+  dbPasswordName: ME_CONFIG_MONGODB_ADMINPASSWORD
+  dbServerName: ME_CONFIG_MONGODB_SERVER
+
+  configName: mongodb-configmap
+  serviceName: mongo-express-service
+  serviceProtocal: TCP
+  serviceType: LoadBalancer
+  servicePort: 8081
+  servicetTargetPort: 8081
+  serviceNodePort: 30000
