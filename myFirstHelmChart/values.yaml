@@ -2,7 +2,7 @@
 namespace: default
 
 mongoDb:
-  replicaCount: 1
+  replicaCount: 2
   name: mongodb-deployment
   labels:
     app: mongodb
@@ -17,7 +17,7 @@ mongoDb:
   targetPort: 27017
 
 mongoExpress:
-  replicaCount: 1
+  replicaCount: 3
   name: mongo-express
   labels:
     app: mongo-express
