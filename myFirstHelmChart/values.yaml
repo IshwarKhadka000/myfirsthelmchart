@@ -2,7 +2,7 @@
 namespace: default
 
 mongoDb:
-  replicaCount: 1
+  replicaCount: 2
   name: mongodb-deployment
   labels:
     app: mongodb
